@@ -1,0 +1,9 @@
+C:\Users\User\Desktop\SimonoDalykai\FormsAplications\TasksManager\TasksManager\bin\Release\TasksManager.exe.config
+C:\Users\User\Desktop\SimonoDalykai\FormsAplications\TasksManager\TasksManager\bin\Release\TasksManager.exe
+C:\Users\User\Desktop\SimonoDalykai\FormsAplications\TasksManager\TasksManager\bin\Release\TasksManager.pdb
+C:\Users\User\Desktop\SimonoDalykai\FormsAplications\TasksManager\TasksManager\obj\Release\TasksManager.TasksManager.resources
+C:\Users\User\Desktop\SimonoDalykai\FormsAplications\TasksManager\TasksManager\obj\Release\TasksManager.Properties.Resources.resources
+C:\Users\User\Desktop\SimonoDalykai\FormsAplications\TasksManager\TasksManager\obj\Release\TasksManager.csproj.GenerateResource.Cache
+C:\Users\User\Desktop\SimonoDalykai\FormsAplications\TasksManager\TasksManager\obj\Release\TasksManager.exe
+C:\Users\User\Desktop\SimonoDalykai\FormsAplications\TasksManager\TasksManager\obj\Release\TasksManager.pdb
+C:\Users\User\Desktop\SimonoDalykai\FormsAplications\TasksManager\TasksManager\obj\Release\TasksManager.csprojResolveAssemblyReference.cache
