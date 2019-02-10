@@ -13,9 +13,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Xml.Serialization;
 
-
-
-
 namespace TasksManager
 {
     public partial class TasksManager : Form
@@ -163,27 +160,34 @@ namespace TasksManager
         {
             if(_index == currentlySelectedIndex) //Same task selected
             {
+                /*
                 allPlayControlls[currentlySelectedIndex].Size = taskButtonSize;
                 for(int i = currentlySelectedIndex; i < allPlayControlls.Count; i++)
                 {
                     allPlayControlls[i].Location = new Point(0, i * 30 + i * 5);
                 }
-
+                */
+                taskButtonAnimation(currentlySelectedIndex, false);
                 currentlySelectedIndex = -1;
             }
             else //Different task selected
             {
-                if(currentlySelectedIndex != -1)
+                if(currentlySelectedIndex != -1) //had one already selected
                 {
-                    allPlayControlls[currentlySelectedIndex].Size = taskButtonSize;
+                    //allPlayControlls[currentlySelectedIndex].Size = taskButtonSize;
+                    taskButtonAnimation(currentlySelectedIndex, false);
                 }
                 currentlySelectedIndex = _index;
+
+                taskButtonAnimation(currentlySelectedIndex, true);
+                /*
                 allPlayControlls[currentlySelectedIndex].Size = new Size(650, 100);
                 allPlayControlls[currentlySelectedIndex].Location = new Point(0, currentlySelectedIndex * 30 + currentlySelectedIndex * 5);
                 for (int i = currentlySelectedIndex + 1; i < allPlayControlls.Count; i++)
                 {
                     allPlayControlls[i].Location = new Point(0, i * 30 + i * 5 + 75);
                 }
+                */
             }
         }
 
@@ -230,6 +234,33 @@ namespace TasksManager
             else //File doesnt exist, create new
             {
                 SaveTasksToFile();
+            }
+        }
+
+        void taskButtonAnimation(int index, bool extend)
+        {
+            for(int i = 0; i < 25; i++)
+            {
+                if (extend)
+                {
+                    allPlayControlls[index].Size = new Size(taskButtonSize.Width, allPlayControlls[index].Size.Height + 3);
+                    allPlayControlls[index].Refresh();
+
+                    for(int y = index + 1; y < allPlayControlls.Count; y++)
+                    {
+                        allPlayControlls[y].Location = new Point(0, allPlayControlls[y].Location.Y + 3);
+                    }
+                }
+                else
+                {
+                    allPlayControlls[index].Size = new Size(taskButtonSize.Width, allPlayControlls[index].Size.Height - 3);
+                    allPlayControlls[index].Refresh();
+
+                    for (int y = index + 1; y < allPlayControlls.Count; y++)
+                    {
+                        allPlayControlls[y].Location = new Point(0, allPlayControlls[y].Location.Y - 3);
+                    }
+                }
             }
         }
     }

@@ -46,6 +46,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.SortByComboBox = new System.Windows.Forms.ComboBox();
+            this.useAnimationsCheckBox = new System.Windows.Forms.CheckBox();
             this.NewTaskPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -217,11 +218,25 @@
             this.SortByComboBox.TabIndex = 7;
             this.SortByComboBox.SelectedIndexChanged += new System.EventHandler(this.SortByComboBox_SelectedIndexChanged);
             // 
+            // useAnimationsCheckBox
+            // 
+            this.useAnimationsCheckBox.AutoSize = true;
+            this.useAnimationsCheckBox.Checked = true;
+            this.useAnimationsCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.useAnimationsCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+            this.useAnimationsCheckBox.Location = new System.Drawing.Point(662, 456);
+            this.useAnimationsCheckBox.Name = "useAnimationsCheckBox";
+            this.useAnimationsCheckBox.Size = new System.Drawing.Size(124, 21);
+            this.useAnimationsCheckBox.TabIndex = 8;
+            this.useAnimationsCheckBox.Text = "Use animations";
+            this.useAnimationsCheckBox.UseVisualStyleBackColor = true;
+            // 
             // TasksManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(798, 489);
+            this.Controls.Add(this.useAnimationsCheckBox);
             this.Controls.Add(this.SortByComboBox);
             this.Controls.Add(this.NewTaskPanel);
             this.Controls.Add(this.NewTaskButton);
@@ -259,6 +274,7 @@
         private System.Windows.Forms.Button NewTaskCancelButton;
         private System.Windows.Forms.Button AddNewTaskButton;
         private System.Windows.Forms.ComboBox SortByComboBox;
+        private System.Windows.Forms.CheckBox useAnimationsCheckBox;
     }
 }
 
