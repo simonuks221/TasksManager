@@ -131,6 +131,7 @@ namespace TasksManager
 
         void DisplayAllTasks()
         {
+            currentlySelectedIndex = -1;
             foreach (Control c in allPlayControlls) //Remove all tasks first
             {
                 c.Dispose();
@@ -160,13 +161,6 @@ namespace TasksManager
         {
             if(_index == currentlySelectedIndex) //Same task selected
             {
-                /*
-                allPlayControlls[currentlySelectedIndex].Size = taskButtonSize;
-                for(int i = currentlySelectedIndex; i < allPlayControlls.Count; i++)
-                {
-                    allPlayControlls[i].Location = new Point(0, i * 30 + i * 5);
-                }
-                */
                 taskButtonAnimation(currentlySelectedIndex, false);
                 currentlySelectedIndex = -1;
             }
@@ -174,20 +168,11 @@ namespace TasksManager
             {
                 if(currentlySelectedIndex != -1) //had one already selected
                 {
-                    //allPlayControlls[currentlySelectedIndex].Size = taskButtonSize;
                     taskButtonAnimation(currentlySelectedIndex, false);
                 }
                 currentlySelectedIndex = _index;
 
                 taskButtonAnimation(currentlySelectedIndex, true);
-                /*
-                allPlayControlls[currentlySelectedIndex].Size = new Size(650, 100);
-                allPlayControlls[currentlySelectedIndex].Location = new Point(0, currentlySelectedIndex * 30 + currentlySelectedIndex * 5);
-                for (int i = currentlySelectedIndex + 1; i < allPlayControlls.Count; i++)
-                {
-                    allPlayControlls[i].Location = new Point(0, i * 30 + i * 5 + 75);
-                }
-                */
             }
         }
 
@@ -199,8 +184,8 @@ namespace TasksManager
         public void RemoveTask(int index)
         {
             allTasks.RemoveAt(index);
-            DisplayAllTasks();
             SaveTasksToFile();
+            DisplayAllTasks();
         }
 
         void SaveTasksToFile()
@@ -239,26 +224,56 @@ namespace TasksManager
 
         void taskButtonAnimation(int index, bool extend)
         {
-            for(int i = 0; i < 25; i++)
+            if (allPlayControlls.Count > index)
             {
-                if (extend)
+                if (useAnimationsCheckBox.Checked)
                 {
-                    allPlayControlls[index].Size = new Size(taskButtonSize.Width, allPlayControlls[index].Size.Height + 3);
-                    allPlayControlls[index].Refresh();
-
-                    for(int y = index + 1; y < allPlayControlls.Count; y++)
+                    int selectedSizeY = (allPlayControlls[index].Size.Height - taskButtonSize.Height) / 50;
+                    for (int i = 0; i < 50; i++)
                     {
-                        allPlayControlls[y].Location = new Point(0, allPlayControlls[y].Location.Y + 3);
+                        if (extend)
+                        {
+                            selectedSizeY = taskButtonSize.Height + allPlayControlls[index].numOfLines * 15 + 7;
+
+                            allPlayControlls[index].Size = new Size(taskButtonSize.Width, allPlayControlls[index].Size.Height + (selectedSizeY + 8) / 50);
+                            allPlayControlls[index].Refresh();
+
+                            for (int y = index + 1; y < allPlayControlls.Count; y++)
+                            {
+                                allPlayControlls[y].Location = new Point(0, allPlayControlls[y].Location.Y + selectedSizeY / 50);
+                            }
+                        }
+                        else
+                        {
+                            allPlayControlls[index].Size = new Size(taskButtonSize.Width, allPlayControlls[index].Size.Height - selectedSizeY);
+                            allPlayControlls[index].Refresh();
+
+                            for (int y = index + 1; y < allPlayControlls.Count; y++)
+                            {
+                                allPlayControlls[y].Location = new Point(0, allPlayControlls[y].Location.Y - selectedSizeY);
+                            }
+                        }
                     }
                 }
-                else
+                else //Dont use animations
                 {
-                    allPlayControlls[index].Size = new Size(taskButtonSize.Width, allPlayControlls[index].Size.Height - 3);
-                    allPlayControlls[index].Refresh();
-
-                    for (int y = index + 1; y < allPlayControlls.Count; y++)
+                    if (extend)
                     {
-                        allPlayControlls[y].Location = new Point(0, allPlayControlls[y].Location.Y - 3);
+                        int selectedSizeY = taskButtonSize.Height + allPlayControlls[index].numOfLines * 15;
+
+                        allPlayControlls[index].Size = new Size(taskButtonSize.Width, taskButtonSize.Height + selectedSizeY);
+                        for (int i = index + 1; i < allPlayControlls.Count; i++) //Set all lower tasks location
+                        {
+                            allPlayControlls[i].Location = new Point(0, i * 30 + i * 5 + selectedSizeY);
+                        }
+                    }
+                    else
+                    {
+                        allPlayControlls[index].Size = taskButtonSize; //reset all tasks location
+                        for (int i = index + 1; i < allPlayControlls.Count; i++)
+                        {
+                            allPlayControlls[i].Location = new Point(0, i * 30 + i * 5);
+                        }
                     }
                 }
             }

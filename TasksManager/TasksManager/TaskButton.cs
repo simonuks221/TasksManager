@@ -22,12 +22,15 @@ namespace TasksManager
         Button deleteTaskButton;
         Button editTaskButton;
 
+        public int numOfLines = 0;
+
         public TaskButton(TaskClass _taskClass, int _index, TasksManager _tasksManager)
         {
             taskClass = _taskClass;
             Text = taskClass.taskName;
             index = _index;
             tasksManager = _tasksManager;
+            numOfLines = taskClass.taskDescription.Split('\n').Length;
 
             this.Size = tasksManager.taskButtonSize;
             this.BackColor = System.Drawing.Color.LightGray;
@@ -38,7 +41,6 @@ namespace TasksManager
             importanceComboBox.Items.AddRange(new string[4] {"Not important", "Normal", "Important", "Extremely important"});
             importanceComboBox.SelectedIndex = (int)taskClass.taskImportance;
             importanceComboBox.Enabled = false;
-            
 
             taskDescriptionTextBox = new TextBox(); //Setup description
             this.Controls.Add(taskDescriptionTextBox);
@@ -46,7 +48,7 @@ namespace TasksManager
             taskDescriptionTextBox.Text = taskClass.taskDescription;
             taskDescriptionTextBox.Enabled = false;
             taskDescriptionTextBox.Multiline = true;
-            taskDescriptionTextBox.Size = new System.Drawing.Size(450, 60);
+            taskDescriptionTextBox.Size = new System.Drawing.Size(450, 15 * numOfLines + 2);
 
             taskNametextBox = new TextBox(); //Setup name
             this.Controls.Add(taskNametextBox);
@@ -93,6 +95,7 @@ namespace TasksManager
                 taskClass.taskImportance = (TaskImportance)importanceComboBox.SelectedIndex;
                 taskClass.taskName = taskNametextBox.Text;
                 taskClass.taskDescription = taskNametextBox.Text;
+                numOfLines = taskClass.taskDescription.Split('\n').Length;
 
                 importanceComboBox.Enabled = false;
                 taskNametextBox.Enabled = false;
