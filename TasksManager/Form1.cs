@@ -21,6 +21,8 @@ namespace TasksManager
         int currentlySelectedIndex;
         List<TaskButton> allPlayControlls = new List<TaskButton>();
 
+        NotifyIcon notifyIcon = new NotifyIcon();
+
         public Size taskButtonSize = new Size(650, 30);
         public Size extendedtaskButtonSize = new Size(650, 130);
 
@@ -154,25 +156,27 @@ namespace TasksManager
         {
             MainTimeLabel.Text = DateTime.Now.ToString();
 
-            for(int i = 0; i < allTasks.Count; i++)
+            for (int i = 0; i < allTasks.Count; i++)
             {
                 bool positive;
                 allTasks[i].taskTimeLeft = TimeHelper.TimeLeft(allTasks[i].taskDateAndTime, out positive);
                 allTasks[i].positiveTime = positive;
-                if (positive)
+                if (positive && !notifyIcon.Visible)
                 {
-                    Console.Out.WriteLine(allTasks[i].taskTimeLeft.Minutes);
-                    if(allTasks[i].taskTimeLeft.Minutes == 1)
+                    if (allTasks[i].taskTimeLeft.Minutes == 10 && allTasks[i].taskTimeLeft.Seconds == 0)
                     {
-                        NotifyIcon notifyIcon = new NotifyIcon();
                         notifyIcon.Visible = true;
-                        notifyIcon.BalloonTipText = allTasks[i].taskName + " ends in: " + TimeHelper.TimeToString(allTasks[i].taskTimeLeft);
+                        notifyIcon.BalloonTipText = allTasks[i].taskName + " scheduled in 10 min";
                         notifyIcon.Icon = SystemIcons.Information;
-
                         notifyIcon.ShowBalloonTip(30000);
-                        notifyIcon.Dispose();
                     }
-                    
+                    else if(allTasks[i].taskTimeLeft.Hours == 1 && allTasks[i].taskTimeLeft.Minutes == 0 && allTasks[i].taskTimeLeft.Seconds == 0)
+                    {
+                        notifyIcon.Visible = true;
+                        notifyIcon.BalloonTipText = allTasks[i].taskName + " scheduled in 1 hour";
+                        notifyIcon.Icon = SystemIcons.Information;
+                        notifyIcon.ShowBalloonTip(30000);
+                    }
                 }
                 allPlayControlls[i].UpdateLeftAmountOfTime();
             }
@@ -281,7 +285,7 @@ namespace TasksManager
                         allPlayControlls[index].Size = extendedtaskButtonSize;
                         for (int i = index + 1; i < allPlayControlls.Count; i++) //Set all lower tasks location
                         {
-                            allPlayControlls[i].Location = new Point(0, i * extendedtaskButtonSize.Height + i * spaceBetweenTaskButtons);
+                            allPlayControlls[i].Location = new Point(0, i * taskButtonSize.Height + i * spaceBetweenTaskButtons + extendedtaskButtonSize.Height - taskButtonSize.Height);
                         }
                     }
                     else
