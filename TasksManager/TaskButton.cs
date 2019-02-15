@@ -64,7 +64,8 @@ namespace TasksManager
 
             taskDateAndTimeLeft = new Label(); //Setup time left
             this.Controls.Add(taskDateAndTimeLeft);
-            taskDateAndTimeLeft.Location = new System.Drawing.Point(350, 9);
+            taskDateAndTimeLeft.Location = new System.Drawing.Point(330, 9);
+            taskDateAndTimeLeft.Size = new System.Drawing.Size(150, 13);
             taskDateAndTimeLeft.Text = (taskClass.taskDateAndTime - DateTime.Now).ToString();
             taskDateAndTimeLeft.Click += TaskDateAndTimeLeftClicked;
 

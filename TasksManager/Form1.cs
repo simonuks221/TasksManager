@@ -163,19 +163,24 @@ namespace TasksManager
                 allTasks[i].positiveTime = positive;
                 if (positive && !notifyIcon.Visible)
                 {
-                    if (allTasks[i].taskTimeLeft.Minutes == 10 && allTasks[i].taskTimeLeft.Seconds == 0)
+                    if (allTasks[i].taskTimeLeft.Minutes == 10 && allTasks[i].taskTimeLeft.Seconds == 0 && allTasks[i].taskTimeLeft.Hours == 0)
                     {
+                        notifyIcon = new NotifyIcon();
                         notifyIcon.Visible = true;
                         notifyIcon.BalloonTipText = allTasks[i].taskName + " scheduled in 10 min";
                         notifyIcon.Icon = SystemIcons.Information;
-                        notifyIcon.ShowBalloonTip(30000);
+                        notifyIcon.ShowBalloonTip(20000);
+                        notifyIcon.Dispose();
                     }
                     else if(allTasks[i].taskTimeLeft.Hours == 1 && allTasks[i].taskTimeLeft.Minutes == 0 && allTasks[i].taskTimeLeft.Seconds == 0)
                     {
+                        Console.Out.WriteLine("notif");
+                        notifyIcon = new NotifyIcon();
                         notifyIcon.Visible = true;
                         notifyIcon.BalloonTipText = allTasks[i].taskName + " scheduled in 1 hour";
                         notifyIcon.Icon = SystemIcons.Information;
-                        notifyIcon.ShowBalloonTip(30000);
+                        notifyIcon.ShowBalloonTip(20000);
+                        notifyIcon.Dispose();
                     }
                 }
                 allPlayControlls[i].UpdateLeftAmountOfTime();
@@ -325,6 +330,7 @@ namespace TasksManager
             if (timeSpan.Hours != 0) timeString += timeSpan.Hours + "h ";
             if (timeSpan.Minutes != 0) timeString += timeSpan.Minutes + "min ";
             if (timeSpan.Seconds != 0) timeString += timeSpan.Seconds + "s ";
+            Console.Out.WriteLine(timeString);
 
             return timeString;
         }
