@@ -175,7 +175,7 @@
             this.NewTaskDescriptiontextBox.Location = new System.Drawing.Point(118, 74);
             this.NewTaskDescriptiontextBox.Multiline = true;
             this.NewTaskDescriptiontextBox.Name = "NewTaskDescriptiontextBox";
-            this.NewTaskDescriptiontextBox.Size = new System.Drawing.Size(270, 116);
+            this.NewTaskDescriptiontextBox.Size = new System.Drawing.Size(270, 90);
             this.NewTaskDescriptiontextBox.TabIndex = 3;
             // 
             // NewTaskNameTextBox

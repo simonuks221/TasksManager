@@ -48,7 +48,7 @@ namespace TasksManager
             taskDescriptionTextBox.Text = taskClass.taskDescription;
             taskDescriptionTextBox.Enabled = false;
             taskDescriptionTextBox.Multiline = true;
-            taskDescriptionTextBox.Size = new System.Drawing.Size(450, 15 * numOfLines + 2);
+            taskDescriptionTextBox.Size = new System.Drawing.Size(450, 90);
 
             taskNametextBox = new TextBox(); //Setup name
             this.Controls.Add(taskNametextBox);
@@ -117,14 +117,17 @@ namespace TasksManager
         protected override void OnClick(EventArgs e)
         {
             //base.OnClick(e);
+            if (importanceComboBox.Enabled) //Main button pressed while editing
+            {
+                EditTaskButtonClicked(null, e);
+            }
             tasksManager.TaskButtonPressed(index);
         }
 
         public void UpdateLeftAmountOfTime()
         {
-            bool positive = true;
-            taskDateAndTimeLeft.Text = TimeHelper.TimeToString(taskClass.taskDateAndTime, out positive);
-            if (positive)
+            taskDateAndTimeLeft.Text = TimeHelper.TimeToString(taskClass.taskTimeLeft);
+            if (taskClass.positiveTime)
             {
                 taskDateAndTimeLeft.ForeColor = System.Drawing.Color.Black;
             }

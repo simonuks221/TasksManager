@@ -21,7 +21,12 @@ namespace TasksManager
         int currentlySelectedIndex;
         List<TaskButton> allPlayControlls = new List<TaskButton>();
 
+        NotifyIcon notifyIcon = new NotifyIcon();
+
         public Size taskButtonSize = new Size(650, 30);
+        public Size extendedtaskButtonSize = new Size(650, 130);
+
+        int spaceBetweenTaskButtons = 5;
 
         public TasksManager()
         {
@@ -151,9 +156,29 @@ namespace TasksManager
         {
             MainTimeLabel.Text = DateTime.Now.ToString();
 
-            foreach(TaskButton t in allPlayControlls)
+            for (int i = 0; i < allTasks.Count; i++)
             {
-                t.UpdateLeftAmountOfTime();
+                bool positive;
+                allTasks[i].taskTimeLeft = TimeHelper.TimeLeft(allTasks[i].taskDateAndTime, out positive);
+                allTasks[i].positiveTime = positive;
+                if (positive && !notifyIcon.Visible)
+                {
+                    if (allTasks[i].taskTimeLeft.Minutes == 10 && allTasks[i].taskTimeLeft.Seconds == 0)
+                    {
+                        notifyIcon.Visible = true;
+                        notifyIcon.BalloonTipText = allTasks[i].taskName + " scheduled in 10 min";
+                        notifyIcon.Icon = SystemIcons.Information;
+                        notifyIcon.ShowBalloonTip(30000);
+                    }
+                    else if(allTasks[i].taskTimeLeft.Hours == 1 && allTasks[i].taskTimeLeft.Minutes == 0 && allTasks[i].taskTimeLeft.Seconds == 0)
+                    {
+                        notifyIcon.Visible = true;
+                        notifyIcon.BalloonTipText = allTasks[i].taskName + " scheduled in 1 hour";
+                        notifyIcon.Icon = SystemIcons.Information;
+                        notifyIcon.ShowBalloonTip(30000);
+                    }
+                }
+                allPlayControlls[i].UpdateLeftAmountOfTime();
             }
         }
 
@@ -228,19 +253,17 @@ namespace TasksManager
             {
                 if (useAnimationsCheckBox.Checked)
                 {
-                    int selectedSizeY = (allPlayControlls[index].Size.Height - taskButtonSize.Height) / 50;
-                    for (int i = 0; i < 50; i++)
+                    for (int i = 0; i < 20; i++)
                     {
+                        int selectedSizeY = (extendedtaskButtonSize.Height - taskButtonSize.Height) / 20;
                         if (extend)
                         {
-                            selectedSizeY = taskButtonSize.Height + allPlayControlls[index].numOfLines * 15 + 7;
-
-                            allPlayControlls[index].Size = new Size(taskButtonSize.Width, allPlayControlls[index].Size.Height + (selectedSizeY + 8) / 50);
+                            allPlayControlls[index].Size = new Size(extendedtaskButtonSize.Width, allPlayControlls[index].Size.Height + selectedSizeY);
                             allPlayControlls[index].Refresh();
 
                             for (int y = index + 1; y < allPlayControlls.Count; y++)
                             {
-                                allPlayControlls[y].Location = new Point(0, allPlayControlls[y].Location.Y + selectedSizeY / 50);
+                                allPlayControlls[y].Location = new Point(0, allPlayControlls[y].Location.Y + selectedSizeY);
                             }
                         }
                         else
@@ -259,12 +282,10 @@ namespace TasksManager
                 {
                     if (extend)
                     {
-                        int selectedSizeY = taskButtonSize.Height + allPlayControlls[index].numOfLines * 15;
-
-                        allPlayControlls[index].Size = new Size(taskButtonSize.Width, taskButtonSize.Height + selectedSizeY);
+                        allPlayControlls[index].Size = extendedtaskButtonSize;
                         for (int i = index + 1; i < allPlayControlls.Count; i++) //Set all lower tasks location
                         {
-                            allPlayControlls[i].Location = new Point(0, i * 30 + i * 5 + selectedSizeY);
+                            allPlayControlls[i].Location = new Point(0, i * taskButtonSize.Height + i * spaceBetweenTaskButtons + extendedtaskButtonSize.Height - taskButtonSize.Height);
                         }
                     }
                     else
@@ -272,7 +293,7 @@ namespace TasksManager
                         allPlayControlls[index].Size = taskButtonSize; //reset all tasks location
                         for (int i = index + 1; i < allPlayControlls.Count; i++)
                         {
-                            allPlayControlls[i].Location = new Point(0, i * 30 + i * 5);
+                            allPlayControlls[i].Location = new Point(0, i * taskButtonSize.Height + i * spaceBetweenTaskButtons);
                         }
                     }
                 }
@@ -295,20 +316,25 @@ namespace TasksManager
                 dateTime.Kind);
         }
 
-        public static string TimeToString(DateTime _dateTime, out bool positive) //Convert time to readable string
+        public static string TimeToString(TimeSpan timeSpan) //Convert time to readable string
         {
-            TimeSpan timeSpan = _dateTime - DateTime.Now;
-            bool newPositive = false;
             string timeString = "";
-            if (timeSpan > TimeSpan.Zero) { timeString += "Time left: "; newPositive = true; } else { timeString += "Time behind: "; newPositive = false; }
+            if (timeSpan > TimeSpan.Zero) { timeString += "Time left: "; } else { timeString += "Time behind: "; }
             timeSpan = timeSpan.Duration();
             if (timeSpan.Days != 0) timeString += timeSpan.Days + "d ";
             if (timeSpan.Hours != 0) timeString += timeSpan.Hours + "h ";
             if (timeSpan.Minutes != 0) timeString += timeSpan.Minutes + "min ";
             if (timeSpan.Seconds != 0) timeString += timeSpan.Seconds + "s ";
 
-            positive = newPositive;
             return timeString;
+        }
+
+        public static TimeSpan TimeLeft(DateTime _dateTime, out bool positive)
+        {
+            TimeSpan timeSpan = _dateTime - DateTime.Now;
+
+            positive = timeSpan > TimeSpan.Zero;
+            return timeSpan;
         }
     }
 }
