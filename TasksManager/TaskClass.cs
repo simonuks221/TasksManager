@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
 
+using Google.Apis.Calendar.v3.Data;
+
+
 
 namespace TasksManager
 {
@@ -16,18 +19,23 @@ namespace TasksManager
         public string taskName;
         public string taskDescription;
 
+        public bool googleTask;
+        public Event googleEvent;
+
         public DateTime taskDateAndTime;
         public bool positiveTime;
         public TimeSpan taskTimeLeft;
 
         public TaskImportance taskImportance;
 
-        public TaskClass(string _taskName, string _taskDescription, TaskImportance _taskImportance, DateTime _taskDateAndTime)
+        public TaskClass(string _taskName, string _taskDescription, TaskImportance _taskImportance, DateTime _taskDateAndTime, bool _googleTask, Event _event)
         {
             taskName = _taskName;
             taskDescription = _taskDescription;
             taskImportance = _taskImportance;
             taskDateAndTime = _taskDateAndTime;
+            googleTask = _googleTask;
+            googleEvent = _event;
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context) //Serialize data

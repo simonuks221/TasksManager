@@ -47,6 +47,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.SortByComboBox = new System.Windows.Forms.ComboBox();
             this.useAnimationsCheckBox = new System.Windows.Forms.CheckBox();
+            this.GoogleCalendarButton = new System.Windows.Forms.Button();
+            this.ChangeGoogleAccount = new System.Windows.Forms.Button();
             this.NewTaskPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -231,11 +233,33 @@
             this.useAnimationsCheckBox.Text = "Use animations";
             this.useAnimationsCheckBox.UseVisualStyleBackColor = true;
             // 
+            // GoogleCalendarButton
+            // 
+            this.GoogleCalendarButton.Location = new System.Drawing.Point(701, 12);
+            this.GoogleCalendarButton.Name = "GoogleCalendarButton";
+            this.GoogleCalendarButton.Size = new System.Drawing.Size(85, 36);
+            this.GoogleCalendarButton.TabIndex = 9;
+            this.GoogleCalendarButton.Text = "Load google tasks";
+            this.GoogleCalendarButton.UseVisualStyleBackColor = true;
+            this.GoogleCalendarButton.Click += new System.EventHandler(this.GoogleCalendarButton_Click);
+            // 
+            // ChangeGoogleAccount
+            // 
+            this.ChangeGoogleAccount.Location = new System.Drawing.Point(594, 12);
+            this.ChangeGoogleAccount.Name = "ChangeGoogleAccount";
+            this.ChangeGoogleAccount.Size = new System.Drawing.Size(101, 36);
+            this.ChangeGoogleAccount.TabIndex = 10;
+            this.ChangeGoogleAccount.Text = "Log out from google";
+            this.ChangeGoogleAccount.UseVisualStyleBackColor = true;
+            this.ChangeGoogleAccount.Click += new System.EventHandler(this.ChangeGoogleAccount_Click);
+            // 
             // TasksManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(798, 489);
+            this.Controls.Add(this.ChangeGoogleAccount);
+            this.Controls.Add(this.GoogleCalendarButton);
             this.Controls.Add(this.useAnimationsCheckBox);
             this.Controls.Add(this.SortByComboBox);
             this.Controls.Add(this.NewTaskPanel);
@@ -275,6 +299,8 @@
         private System.Windows.Forms.Button AddNewTaskButton;
         private System.Windows.Forms.ComboBox SortByComboBox;
         private System.Windows.Forms.CheckBox useAnimationsCheckBox;
+        private System.Windows.Forms.Button GoogleCalendarButton;
+        private System.Windows.Forms.Button ChangeGoogleAccount;
     }
 }
 

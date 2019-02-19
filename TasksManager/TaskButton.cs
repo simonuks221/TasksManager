@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -21,6 +22,7 @@ namespace TasksManager
         Label taskDateAndTimeLeft;
         Button deleteTaskButton;
         Button editTaskButton;
+        PictureBox googlePictureBox;
 
         public int numOfLines = 0;
 
@@ -30,7 +32,10 @@ namespace TasksManager
             Text = taskClass.taskName;
             index = _index;
             tasksManager = _tasksManager;
-            numOfLines = taskClass.taskDescription.Split('\n').Length;
+            if(taskClass.taskDescription != null)
+            {
+                numOfLines = taskClass.taskDescription.Split('\n').Length;
+            }
 
             this.Size = tasksManager.taskButtonSize;
             this.BackColor = System.Drawing.Color.LightGray;
@@ -82,6 +87,15 @@ namespace TasksManager
             editTaskButton.Size = new System.Drawing.Size(20, 20);
             editTaskButton.Text = "E";
             editTaskButton.Click += EditTaskButtonClicked;
+
+            if (taskClass.googleTask)
+            {
+                googlePictureBox = new PictureBox(); //Setup edit button
+                this.Controls.Add(googlePictureBox);
+                googlePictureBox.Location = new Point(610, 80);
+                googlePictureBox.Size = new Size(30, 30);       
+                googlePictureBox.Image = Image.FromFile("google.jpg");
+            }
         }
 
         private void TaskDateAndTimeLeftClicked(object sender, EventArgs e) //text pressed 
@@ -130,11 +144,11 @@ namespace TasksManager
             taskDateAndTimeLeft.Text = TimeHelper.TimeToString(taskClass.taskTimeLeft);
             if (taskClass.positiveTime)
             {
-                taskDateAndTimeLeft.ForeColor = System.Drawing.Color.Black;
+                taskDateAndTimeLeft.ForeColor = Color.Black;
             }
             else
             {
-                taskDateAndTimeLeft.ForeColor = System.Drawing.Color.Red;
+                taskDateAndTimeLeft.ForeColor = Color.Red;
             }
         }
     }

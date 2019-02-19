@@ -28,6 +28,8 @@ namespace TasksManager
 
         int spaceBetweenTaskButtons = 5;
 
+        GoogleCalendarManager googleCalendarManager;
+
         public TasksManager()
         {
             InitializeComponent();
@@ -72,7 +74,7 @@ namespace TasksManager
                 TaskImportance taskImportance = (TaskImportance)NewTaskImportanceComboBox.SelectedIndex;
                 DateTime taskDateTime = TimeHelper.ChangeTime(NewTaskDatePicker.Value, newTaskTimePicker.Value.Hour, newTaskTimePicker.Value.Minute, newTaskTimePicker.Value.Second, newTaskTimePicker.Value.Millisecond);
 
-                TaskClass newTask = new TaskClass(NewTaskNameTextBox.Text, NewTaskDescriptiontextBox.Text, taskImportance, taskDateTime);
+                TaskClass newTask = new TaskClass(NewTaskNameTextBox.Text, NewTaskDescriptiontextBox.Text, taskImportance, taskDateTime, false, null);
                 allTasks.Add(newTask);
 
                 SortTaskList();
@@ -213,6 +215,10 @@ namespace TasksManager
 
         public void RemoveTask(int index)
         {
+            if (allTasks[index].googleTask)
+            {
+                googleCalendarManager.deleteGoogleTask(allTasks[index].googleEvent);
+            }
             allTasks.RemoveAt(index);
             SaveTasksToFile();
             DisplayAllTasks();
@@ -222,7 +228,16 @@ namespace TasksManager
         {
             Stream stream = File.Open("tasksData.dat", FileMode.Create); //if doesnt exist, create
             BinaryFormatter bf = new BinaryFormatter();
-            bf.Serialize(stream, allTasks);
+            List<TaskClass> saveTasks = new List<TaskClass>(allTasks); //Save only task created by user, dont save goole tasks
+            for(int i = 0; i < saveTasks.Count; i++)
+            {
+                if (saveTasks[i].googleTask)
+                {
+                    saveTasks.RemoveAt(i);
+                    i--;
+                }
+            }
+            bf.Serialize(stream, saveTasks);
             stream.Close();
         }
 
@@ -304,6 +319,25 @@ namespace TasksManager
                 }
             }
         }
+
+        private void GoogleCalendarButton_Click(object sender, EventArgs e)
+        {
+            googleCalendarManager = new GoogleCalendarManager(this);
+            allTasks.AddRange(googleCalendarManager.getGoogleTasks());
+            DisplayAllTasks();
+        }
+
+        private void ChangeGoogleAccount_Click(object sender, EventArgs e)
+        {
+            if(googleCalendarManager != null)
+            {
+                SaveTasksToFile();
+                googleCalendarManager.ChangeGoogleAccount();
+                googleCalendarManager = null;
+                OpenTasksFromFile(); //Shows only in app added tasks
+                DisplayAllTasks();
+            }
+        }
     }
 
     public static class TimeHelper //Helps to set time
@@ -330,7 +364,6 @@ namespace TasksManager
             if (timeSpan.Hours != 0) timeString += timeSpan.Hours + "h ";
             if (timeSpan.Minutes != 0) timeString += timeSpan.Minutes + "min ";
             if (timeSpan.Seconds != 0) timeString += timeSpan.Seconds + "s ";
-            Console.Out.WriteLine(timeString);
 
             return timeString;
         }
